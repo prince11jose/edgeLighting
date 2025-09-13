@@ -1,0 +1,126 @@
+name: 🚀 Release APK
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+jobs:
+  release:
+    name: 🎉 Create Release
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: ☕ Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: 🔧 Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        api-level: 34
+        build-tools: 34.0.0
+        
+    - name: 📜 Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: 🏗️ Build Release APK
+      run: ./gradlew assembleRelease --stacktrace
+      env:
+        GRADLE_OPTS: -Dorg.gradle.daemon=false
+        
+    - name: 🏗️ Build Debug APK
+      run: ./gradlew assembleDebug --stacktrace
+      env:
+        GRADLE_OPTS: -Dorg.gradle.daemon=false
+        
+    - name: 📝 Get Release Tag
+      id: tag
+      run: |
+        if [ "${{ github.event.inputs.tag }}" != "" ]; then
+          echo "TAG=${{ github.event.inputs.tag }}" >> $GITHUB_OUTPUT
+        else
+          echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: 📋 Generate Release Notes
+      id: release_notes
+      run: |
+        cat > release_notes.md << 'EOF'
+        ## 🌈 Edge Lighting ${{ steps.tag.outputs.TAG }}
+        
+        ### 📱 What's New
+        - Multicolor edge lighting for all notifications
+        - Smart color extraction from app icons
+        - 30+ app-specific color mappings
+        - Android 14 compatibility
+        - Smooth edge animations
+        
+        ### 📋 Features
+        - 🎨 **Dynamic Colors**: Extracts vibrant colors from notification icons
+        - ✨ **Smooth Animations**: Beautiful traveling light effects
+        - 📱 **Wide Compatibility**: Android 5.0 to Android 14
+        - 🔒 **Privacy Focused**: No data collection, local processing only
+        - ⚡ **Battery Optimized**: Efficient rendering and minimal impact
+        
+        ### 📱 Installation
+        1. Download `edge-lighting-release.apk`
+        2. Enable "Unknown Sources" in Android Settings
+        3. Install the APK
+        4. Grant required permissions:
+           - Notification Listener Access
+           - Display Over Other Apps
+        5. Enjoy beautiful edge lighting! 🌈
+        
+        ### 🔧 Technical Details
+        - **Min SDK**: Android 5.0 (API 21)
+        - **Target SDK**: Android 14 (API 34)
+        - **Size**: ~2-4 MB
+        - **Permissions**: Overlay, Notification Access
+        
+        ### 🐛 Known Issues
+        None currently reported.
+        
+        ### 💝 Support
+        If you enjoy Edge Lighting, please ⭐ star this repository!
+        EOF
+        
+    - name: 🎉 Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ steps.tag.outputs.TAG }}
+        name: 🌈 Edge Lighting ${{ steps.tag.outputs.TAG }}
+        body_path: release_notes.md
+        draft: false
+        prerelease: false
+        files: |
+          app/build/outputs/apk/release/app-release-unsigned.apk
+          app/build/outputs/apk/debug/app-debug.apk
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: 🏷️ Rename APKs for Release
+      run: |
+        cp app/build/outputs/apk/release/app-release-unsigned.apk edge-lighting-${{ steps.tag.outputs.TAG }}-release.apk
+        cp app/build/outputs/apk/debug/app-debug.apk edge-lighting-${{ steps.tag.outputs.TAG }}-debug.apk
+        
+    - name: 📦 Upload Release Assets
+      uses: actions/upload-artifact@v4
+      with:
+        name: edge-lighting-${{ steps.tag.outputs.TAG }}
+        path: |
+          edge-lighting-${{ steps.tag.outputs.TAG }}-release.apk
+          edge-lighting-${{ steps.tag.outputs.TAG }}-debug.apk
+        retention-days: 90

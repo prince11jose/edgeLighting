@@ -1,0 +1,175 @@
+name: 🌈 Build Edge Lighting APK
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type'
+        required: true
+        default: 'debug'
+        type: choice
+        options:
+        - debug
+        - release
+
+jobs:
+  build:
+    name: 📱 Build Android APK
+    runs-on: ubuntu-latest  # x86_64 runner
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: ☕ Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: 🔧 Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        api-level: 34
+        build-tools: 34.0.0
+        
+    - name: 📜 Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: 🧹 Clean previous builds
+      run: ./gradlew clean
+      
+    - name: 🔍 Validate Gradle Wrapper
+      uses: gradle/wrapper-validation-action@v2
+      
+    - name: 🏗️ Build Debug APK
+      if: ${{ github.event.inputs.build_type == 'debug' || github.event.inputs.build_type == '' }}
+      run: ./gradlew assembleDebug --stacktrace
+      env:
+        GRADLE_OPTS: -Dorg.gradle.daemon=false
+        
+    - name: 🏗️ Build Release APK
+      if: ${{ github.event.inputs.build_type == 'release' }}
+      run: ./gradlew assembleRelease --stacktrace
+      env:
+        GRADLE_OPTS: -Dorg.gradle.daemon=false
+        
+    - name: 📱 Upload Debug APK
+      if: ${{ github.event.inputs.build_type == 'debug' || github.event.inputs.build_type == '' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: edge-lighting-debug-apk
+        path: app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 30
+        
+    - name: 📱 Upload Release APK
+      if: ${{ github.event.inputs.build_type == 'release' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: edge-lighting-release-apk
+        path: app/build/outputs/apk/release/app-release-unsigned.apk
+        retention-days: 30
+        
+    - name: 📊 Generate Build Report
+      if: always()
+      run: |
+        echo "## 🌈 Edge Lighting Build Report" >> $GITHUB_STEP_SUMMARY
+        echo "| Item | Value |" >> $GITHUB_STEP_SUMMARY
+        echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
+        echo "| Build Type | ${{ github.event.inputs.build_type || 'debug' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Java Version | $(java -version 2>&1 | head -n1) |" >> $GITHUB_STEP_SUMMARY
+        echo "| Gradle Version | $(./gradlew --version | grep Gradle | head -n1) |" >> $GITHUB_STEP_SUMMARY
+        echo "| Android Compile SDK | 34 |" >> $GITHUB_STEP_SUMMARY
+        echo "| Target SDK | 34 |" >> $GITHUB_STEP_SUMMARY
+        echo "| Min SDK | 21 |" >> $GITHUB_STEP_SUMMARY
+        
+        if [ -f "app/build/outputs/apk/debug/app-debug.apk" ]; then
+          APK_SIZE=$(du -h app/build/outputs/apk/debug/app-debug.apk | cut -f1)
+          echo "| Debug APK Size | $APK_SIZE |" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        if [ -f "app/build/outputs/apk/release/app-release-unsigned.apk" ]; then
+          APK_SIZE=$(du -h app/build/outputs/apk/release/app-release-unsigned.apk | cut -f1)
+          echo "| Release APK Size | $APK_SIZE |" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📱 Installation Instructions" >> $GITHUB_STEP_SUMMARY
+        echo "1. Download the APK from build artifacts" >> $GITHUB_STEP_SUMMARY
+        echo "2. Enable 'Unknown Sources' in Android Settings" >> $GITHUB_STEP_SUMMARY
+        echo "3. Install the APK on your device" >> $GITHUB_STEP_SUMMARY
+        echo "4. Grant notification listener permission" >> $GITHUB_STEP_SUMMARY
+        echo "5. Grant overlay permission" >> $GITHUB_STEP_SUMMARY
+        echo "6. Enjoy beautiful edge lighting effects! 🌈" >> $GITHUB_STEP_SUMMARY
+
+  test:
+    name: 🧪 Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: ☕ Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: 🔧 Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        api-level: 34
+        build-tools: 34.0.0
+        
+    - name: 📜 Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: 🧪 Run Unit Tests
+      run: ./gradlew test --stacktrace
+      
+    - name: 📊 Upload Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: app/build/reports/tests/
+        retention-days: 30
+
+  lint:
+    name: 🔍 Code Quality Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: ☕ Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: 🔧 Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        api-level: 34
+        build-tools: 34.0.0
+        
+    - name: 📜 Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: 🔍 Run Lint Check
+      run: ./gradlew lint --stacktrace
+      
+    - name: 📊 Upload Lint Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: lint-results
+        path: app/build/reports/lint-results-debug.html
+        retention-days: 30
