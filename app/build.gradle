@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.edgelighting'
+    namespace 'com.edgelighting.app'
     compileSdkVersion 34
 
     defaultConfig {
-        applicationId "com.example.edgelighting"
+        applicationId "com.edgelighting.app"
         minSdkVersion 21
         targetSdkVersion 34
         versionCode 1

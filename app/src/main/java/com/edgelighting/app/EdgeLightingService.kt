@@ -1,4 +1,4 @@
-package com.example.edgelighting
+package com.edgelighting.app
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -24,9 +24,9 @@ class EdgeLightingService : Service() {
         private const val FOREGROUND_NOTIFICATION_ID = 1001
         private const val NOTIFICATION_CHANNEL_ID = "edge_lighting_service"
         
-        const val ACTION_START_SERVICE = "com.example.edgelighting.START_SERVICE"
-        const val ACTION_STOP_SERVICE = "com.example.edgelighting.STOP_SERVICE"
-        const val ACTION_SHOW_EDGE_LIGHTING = "com.example.edgelighting.SHOW_EDGE_LIGHTING"
+        const val ACTION_START_SERVICE = "com.edgelighting.app.START_SERVICE"
+        const val ACTION_STOP_SERVICE = "com.edgelighting.app.STOP_SERVICE"
+        const val ACTION_SHOW_EDGE_LIGHTING = "com.edgelighting.app.SHOW_EDGE_LIGHTING"
         
         const val EXTRA_COLOR = "color"
         const val EXTRA_DURATION = "duration"

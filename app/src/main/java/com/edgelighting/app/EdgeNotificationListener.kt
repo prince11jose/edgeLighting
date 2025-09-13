@@ -1,4 +1,4 @@
-package com.example.edgelighting
+package com.edgelighting.app
 
 import android.app.Notification
 import android.content.Intent
@@ -16,7 +16,7 @@ class EdgeNotificationListener : NotificationListenerService() {
 
     companion object {
         private const val TAG = "EdgeNotificationListener"
-        const val ACTION_NOTIFICATION_POSTED = "com.example.edgelighting.NOTIFICATION_POSTED"
+        const val ACTION_NOTIFICATION_POSTED = "com.edgelighting.app.NOTIFICATION_POSTED"
         const val EXTRA_PACKAGE_NAME = "package_name"
         const val EXTRA_TITLE = "title"
         const val EXTRA_TEXT = "text"

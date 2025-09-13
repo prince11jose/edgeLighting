@@ -1,5 +1,6 @@
--keep class com.example.edgelighting.** { *; }
--keepclassmembers class com.example.edgelighting.** { *; }
+# Keep edge lighting classes with new package name
+-keep class com.edgelighting.app.** { *; }
+-keepclassmembers class com.edgelighting.app.** { *; }
 
 # Keep notification listener service
 -keep class * extends android.service.notification.NotificationListenerService {

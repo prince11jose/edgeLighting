@@ -35,6 +35,10 @@
         android:theme="@style/AppTheme"
         android:appCategory="productivity"
         android:description="@string/app_description"
+        android:requestLegacyExternalStorage="false"
+        android:extractNativeLibs="false"
+        android:debuggable="false"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="26">
 
         <!-- Main Activity -->

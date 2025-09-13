@@ -1,4 +1,4 @@
-package com.example.edgelighting
+package com.edgelighting.app
 
 import android.graphics.Bitmap
 import android.graphics.Color

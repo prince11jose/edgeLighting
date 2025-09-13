@@ -1,4 +1,4 @@
-package com.example.edgelighting
+package com.edgelighting.app
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter

@@ -1,4 +1,4 @@
-package com.example.edgelighting
+package com.edgelighting.app
 
 import android.Manifest
 import android.content.ComponentName

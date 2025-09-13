@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Edge Lighting</string>
-    <string name="app_description">Enhance your notifications with colorful edge lighting effects around your screen. A productivity app that makes incoming notifications more visible and engaging.</string>
+    <string name="app_description">Edge Lighting enhances your Android notification experience with beautiful, customizable lighting effects around your screen edges. This productivity app improves notification visibility and adds visual appeal without compromising privacy or performance. All processing happens locally on your device - no data is collected, stored, or transmitted to external servers.</string>
     <string name="notification_service_description">Edge Lighting Notification Service</string>
     <string name="service_notification_title">Edge Lighting Active</string>
     <string name="service_notification_content">Monitoring notifications for edge lighting effects</string>
     <string name="permission_notification_title">Notification Access Required</string>
-    <string name="permission_notification_message">Edge Lighting needs notification access to create lighting effects for incoming notifications.</string>
-    <string name="permission_overlay_title">Overlay Permission Required</string>
-    <string name="permission_overlay_message">Edge Lighting needs permission to display over other apps to show the lighting effect.</string>
+    <string name="permission_notification_message">Edge Lighting enhances your notification experience by creating beautiful lighting effects around your screen edges. This permission allows the app to detect when new notifications arrive so it can display appropriate colored lighting effects. Your notification content is never stored or transmitted - only the arrival event and app icon are used for color extraction.</string>
+    <string name="permission_overlay_title">Display Over Other Apps Permission</string>
+    <string name="permission_overlay_message">Edge Lighting needs permission to display lighting effects on top of other applications. This creates the beautiful edge lighting animation around your screen when notifications arrive. The overlay is completely transparent and only shows colored lighting - it never blocks or interferes with your normal app usage. This permission is essential for the core functionality of providing visual notification enhancements.</string>
     <string name="grant_permission">Grant Permission</string>
     <string name="permission_granted">Permission Granted</string>
     <string name="test_edge_lighting">Test Edge Lighting</string>
