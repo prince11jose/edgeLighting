@@ -2,23 +2,7 @@ package com.example.edgelighting
 
 import android.app.Notification
 import android.app.NotificationChannel
-import a    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                NOTIFICATION_CHANNEL_ID,
-                "Edge Lighting Service",
-                NotificationManager.IMPORTANCE_LOW
-            ).apply {
-                description = "Notification for edge lighting service"
-                setShowBadge(false)
-                enableLights(false)
-                enableVibration(false)
-            }
-            
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-    }ficationManager
+import android.app.NotificationManager
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
