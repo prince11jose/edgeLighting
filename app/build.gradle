@@ -21,12 +21,13 @@ android {
     }
 
     signingConfigs {
-        release {
-            // We'll create a keystore for production signing
-            storeFile file('keystore/release.keystore')
-            storePassword 'edgelighting2025'
-            keyAlias 'edgelighting'
-            keyPassword 'edgelighting2025'
+        if (file('keystore/release.keystore').exists()) {
+            release {
+                storeFile file('keystore/release.keystore')
+                storePassword 'edgelighting2025'
+                keyAlias 'edgelighting'
+                keyPassword 'edgelighting2025'
+            }
         }
     }
 
@@ -41,7 +42,11 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            
+            // Only use release signing if keystore exists, otherwise use debug signing
+            if (file('keystore/release.keystore').exists()) {
+                signingConfig signingConfigs.release
+            }
             
             // Production optimizations
             zipAlignEnabled true

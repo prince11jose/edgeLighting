@@ -75,3 +75,8 @@ proguard/
 
 # Android Profiling
 *.hprof
+
+# Keystores (sensitive files)
+app/keystore/
+*.keystore
+*.jks
