@@ -13,12 +13,46 @@ android {
         targetSdkVersion 34
         versionCode 1
         versionName "1.0"
+        
+        // Help Play Protect understand the app
+        manifestPlaceholders = [
+            appName: "Edge Lighting"
+        ]
+    }
+
+    signingConfigs {
+        release {
+            // We'll create a keystore for production signing
+            storeFile file('keystore/release.keystore')
+            storePassword 'edgelighting2025'
+            keyAlias 'edgelighting'
+            keyPassword 'edgelighting2025'
+        }
     }
 
     buildTypes {
-        release {
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
             minifyEnabled false
+        }
+        
+        release {
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            
+            // Production optimizations
+            zipAlignEnabled true
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            
+            // Play Protect friendly settings
+            manifestPlaceholders = [
+                appName: "Edge Lighting"
+            ]
         }
     }
     

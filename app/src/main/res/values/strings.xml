@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Edge Lighting</string>
+    <string name="app_description">Enhance your notifications with colorful edge lighting effects around your screen. A productivity app that makes incoming notifications more visible and engaging.</string>
     <string name="notification_service_description">Edge Lighting Notification Service</string>
     <string name="service_notification_title">Edge Lighting Active</string>
     <string name="service_notification_content">Monitoring notifications for edge lighting effects</string>
